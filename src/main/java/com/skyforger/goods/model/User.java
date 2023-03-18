@@ -1,15 +1,13 @@
 package com.skyforger.goods.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 /**
  * @author Ivan 18.03.2023
  */
 
 @Entity
+@Table(name = "myUser")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
