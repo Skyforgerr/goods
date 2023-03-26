@@ -5,6 +5,8 @@ import com.skyforger.goods.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Ivan 18.03.2023
  */
@@ -16,5 +18,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
