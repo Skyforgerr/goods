@@ -4,8 +4,11 @@
  import com.skyforger.goods.model.Good;
 
  import com.skyforger.goods.repository.GoodRepository;
+ import org.springframework.stereotype.Service;
+
  import java.util.List;
 
+ @Service
  public class GoodServiceImpl implements GoodService{
      @Autowired
      private GoodRepository goodRepository;
