@@ -27,7 +27,6 @@ public class UserController {
     @GetMapping("/view")
     public List<User> viewAllUsers(){
         return userService.getAllUsers();
-
     }
 
 }
