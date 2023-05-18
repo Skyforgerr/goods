@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static io.jsonwebtoken.Jwts.*;
+
 @Service
 public class JwtService {
 
@@ -36,8 +38,7 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ){
-        return Jwts
-                .builder()
+        return builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
