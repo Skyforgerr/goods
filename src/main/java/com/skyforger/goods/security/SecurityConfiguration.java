@@ -18,8 +18,7 @@ import static com.skyforger.goods.model.Permission.MANAGER_CREATE;
 import static com.skyforger.goods.model.Permission.MANAGER_DELETE;
 import static com.skyforger.goods.model.Permission.MANAGER_READ;
 import static com.skyforger.goods.model.Permission.MANAGER_UPDATE;
-import static com.skyforger.goods.model.Role.ADMIN;
-import static com.skyforger.goods.model.Role.MANAGER;
+import com.skyforger.goods.model.Role;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -37,20 +36,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**")// Указанное здесь будет доступно для всех пользователей
                 .permitAll()
-
-                .requestMatchers("/api/v1/managment/**").hasAnyAuthority(ADMIN.name(), MANAGER.name())
-
-                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
-
-                .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
-
-                .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
-                .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
-                .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-                .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())
+                .requestMatchers("/users/view", "/goods/view").hasRole(Role.MANAGER.name())
 
                 .anyRequest()
                 .authenticated()

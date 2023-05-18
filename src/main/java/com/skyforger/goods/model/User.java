@@ -25,12 +25,13 @@ import java.util.List;
 @Table(name = "_user")
 public class User implements UserDetails{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String mail;
     private String address;
     private String password;
+    private boolean active;
 
     public String getPassword() {
         return password;
@@ -46,6 +47,7 @@ public class User implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
     }
+
 
     @Override
     public String getUsername() {

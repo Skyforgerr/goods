@@ -7,12 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author Ivan 18.03.2023
- */
-
 @RestController
-@RequestMapping("/api/v1/managment/user")
+@RequestMapping("/users")
 @CrossOrigin
 public class UserController {
     @Autowired
@@ -20,6 +16,7 @@ public class UserController {
 
     @GetMapping("/view")
     public List<User> viewAllUsers(){
+        System.out.printf("users");
         return userService.getAllUsers();
     }
 
