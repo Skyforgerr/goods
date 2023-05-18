@@ -61,8 +61,9 @@ public class JwtService {
 
     private Claims extractAllClaims(String token){
         // Может быть проблема, так как не используется parserBuilder()
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
