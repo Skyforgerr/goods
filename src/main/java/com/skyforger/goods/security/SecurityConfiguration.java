@@ -10,15 +10,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.skyforger.goods.model.Permission.ADMIN_CREATE;
-import static com.skyforger.goods.model.Permission.ADMIN_DELETE;
-import static com.skyforger.goods.model.Permission.ADMIN_READ;
-import static com.skyforger.goods.model.Permission.ADMIN_UPDATE;
-import static com.skyforger.goods.model.Permission.MANAGER_CREATE;
-import static com.skyforger.goods.model.Permission.MANAGER_DELETE;
-import static com.skyforger.goods.model.Permission.MANAGER_READ;
-import static com.skyforger.goods.model.Permission.MANAGER_UPDATE;
 import com.skyforger.goods.model.Role;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -31,13 +29,14 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")// Указанное здесь будет доступно для всех пользователей
+                .requestMatchers("/api/v1/auth/**", "/", "/goods/view")// Указанное здесь будет доступно для всех пользователей
                 .permitAll()
-                .requestMatchers("/users/view", "/goods/view").hasRole(Role.MANAGER.name())
-
+                .requestMatchers("/users/view").hasRole(Role.MANAGER.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -48,5 +47,16 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+        return urlBasedCorsConfigurationSource;
     }
 }

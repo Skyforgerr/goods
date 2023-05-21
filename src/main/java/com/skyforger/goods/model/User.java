@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Ivan 18.03.2023
@@ -48,6 +49,15 @@ public class User implements UserDetails{
         return role.getAuthorities();
     }
 
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "user_good",
+    joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_good"))
+    private Set<Good> cart;
 
     @Override
     public String getUsername() {

@@ -7,5 +7,5 @@
  public interface GoodService {
      public Good saveGood(Good good);
      public List<Good> getAllGoods();
-    
+
  }
