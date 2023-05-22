@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**", "/", "/goods/view")// Указанное здесь будет доступно для всех пользователей
+                .requestMatchers("/api/v1/auth/**", "/", "/goods/view", "/goods/search")// Указанное здесь будет доступно для всех пользователей
                 .permitAll()
                 .requestMatchers("/users/view").hasRole(Role.MANAGER.name())
                 .anyRequest()

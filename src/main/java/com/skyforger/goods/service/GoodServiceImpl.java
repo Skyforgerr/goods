@@ -22,4 +22,7 @@
      public List<Good> getAllGoods() {
          return goodRepository.findAll();
      }
+     public List<Good> findByName(String name) {
+         return goodRepository.searchByName(name);
+     }
  }
