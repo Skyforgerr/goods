@@ -25,4 +25,9 @@
      public List<Good> findByName(String name) {
          return goodRepository.searchByName(name);
      }
+
+     @Override
+     public void deleteGood(int good_id) {
+         goodRepository.deleteById(good_id);
+     }
  }

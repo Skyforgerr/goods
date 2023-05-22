@@ -1,5 +1,6 @@
  package com.skyforger.goods.controller;
 
+ import com.skyforger.goods.repository.GoodRepository;
  import com.skyforger.goods.requests.GoodRequest;
  import org.json.JSONObject;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@
      @Autowired
      private GoodService goodService;
 
+     @Autowired
+     private GoodRepository goodRepository;
+
      int amountOfElementsOnPage = 10;
 
       @PostMapping("/add")
@@ -31,12 +35,16 @@
           return "redirect:goods/view";
       }
 
+      @GetMapping("/del")
+      public String deleteGood(@RequestParam int goodId){
+          goodRepository.deleteById(goodId);
+          return "redirect:goods/view";
+      }
+
       @GetMapping("/view")
       public List<Good> viewAllGoods(){
           return goodService.getAllGoods();
       }
-
-
 
 
      @GetMapping("/search")
