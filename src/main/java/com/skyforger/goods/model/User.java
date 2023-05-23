@@ -49,7 +49,6 @@ public class User implements UserDetails{
         return role.getAuthorities();
     }
 
-
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
@@ -58,6 +57,14 @@ public class User implements UserDetails{
     joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_good"))
     private Set<Good> cart;
+
+    public void addToCart(Good good){
+        cart.add(good);
+    }
+
+    public void removeFromCart(Good good){
+        cart.remove(good);
+    }
 
     @Override
     public String getUsername() {

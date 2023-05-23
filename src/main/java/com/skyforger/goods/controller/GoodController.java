@@ -37,7 +37,7 @@
 
       @DeleteMapping("/del")
       public String deleteGood(@RequestParam Long goodId){
-          goodRepository.deleteById(Math.toIntExact(goodId));
+          goodRepository.deleteById(goodId);
           return "redirect:goods/view";
       }
 

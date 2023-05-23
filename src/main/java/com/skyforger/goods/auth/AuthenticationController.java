@@ -1,6 +1,9 @@
 package com.skyforger.goods.auth;
 
 import com.skyforger.goods.model.User;
+import com.skyforger.goods.repository.GoodRepository;
+import com.skyforger.goods.repository.UserRepository;
+import com.skyforger.goods.requests.CartRequest;
 import com.skyforger.goods.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +23,12 @@ public class AuthenticationController {
 
     @Autowired
     TokenRepository tokenRepository;
+
+    @Autowired
+    GoodRepository goodRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
 
     @PostMapping("/register")
@@ -68,8 +77,26 @@ public class AuthenticationController {
         token = token.substring(7,token.length());
         User user = tokenRepository.findByToken(token).get().getUser();
         System.out.println(user.getCart());
-        json.put("cart", user.getCart());
+        json.put("cart", user.getCart()); //значение, к которому нужно цепляться в react
         message = json.toString();
         return message;
+    }
+
+    @PostMapping("/addcart")
+    @CrossOrigin(origins = "*")
+    public void addItemToCart(@RequestHeader("Authorization") String token, @RequestBody CartRequest cartRequest){
+        token = token.substring(7, token.length());
+        User user = tokenRepository.findByToken(token).get().getUser();
+        user.addToCart(goodRepository.findById(cartRequest.getGood_id()).get());
+        userRepository.save(user);
+    }
+
+    @PostMapping("/deletecart")
+    @CrossOrigin(origins = "*")
+    public void removeItemFromCart(@RequestHeader("Authorization") String token, @RequestBody CartRequest cartRequest){
+        token = token.substring(7,token.length());
+        User user = tokenRepository.findByToken(token).get().getUser();
+        user.removeFromCart(goodRepository.findById(cartRequest.getGood_id()).get());
+        userRepository.save(user);
     }
 }
