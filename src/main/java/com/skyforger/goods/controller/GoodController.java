@@ -35,9 +35,9 @@
           return "redirect:goods/view";
       }
 
-      @GetMapping("/del")
-      public String deleteGood(@RequestParam int goodId){
-          goodRepository.deleteById(goodId);
+      @DeleteMapping("/del")
+      public String deleteGood(@RequestParam Long goodId){
+          goodRepository.deleteById(Math.toIntExact(goodId));
           return "redirect:goods/view";
       }
 

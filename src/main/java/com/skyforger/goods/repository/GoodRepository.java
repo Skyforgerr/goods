@@ -14,4 +14,6 @@
          SELECT g FROM Good g WHERE LOWER(g.name) LIKE CONCAT('%', LOWER(:name), '%')
          """)
   List<Good> searchByName(@Param("name") String name);
+
+  List<Good> findById(long id);
  }
