@@ -76,7 +76,6 @@ public class AuthenticationController {
         String message;
         token = token.substring(7,token.length());
         User user = tokenRepository.findByToken(token).get().getUser();
-        System.out.println(user.getCart());
         json.put("cart", user.getCart()); //значение, к которому нужно цепляться в react
         message = json.toString();
         return message;

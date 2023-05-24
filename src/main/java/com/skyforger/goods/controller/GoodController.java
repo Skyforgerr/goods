@@ -36,6 +36,7 @@
       }
 
       @DeleteMapping("/del")
+      @CrossOrigin(origins = "*")
       public String deleteGood(@RequestParam Long goodId){
           goodRepository.deleteById(goodId);
           return "redirect:goods/view";
