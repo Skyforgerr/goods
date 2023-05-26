@@ -1,9 +1,14 @@
 package com.skyforger.goods.auth;
 
+import com.skyforger.goods.model.Good;
+import com.skyforger.goods.model.Order;
 import com.skyforger.goods.model.User;
 import com.skyforger.goods.repository.GoodRepository;
+import com.skyforger.goods.repository.OrderRepository;
 import com.skyforger.goods.repository.UserRepository;
 import com.skyforger.goods.requests.CartRequest;
+import com.skyforger.goods.requests.OrderRequest;
+import com.skyforger.goods.responses.OrderResponse;
 import com.skyforger.goods.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,6 +38,9 @@ public class AuthenticationController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    OrderRepository orderRepository;
 
 
     @PostMapping("/register")
@@ -68,7 +80,40 @@ public class AuthenticationController {
         message = object.toString();
         return message;
     }
+    @PostMapping("/order")
+    @CrossOrigin
+    public ResponseEntity<String> addOrder(@RequestBody OrderRequest orderRequest, @RequestHeader("Authorization") String token) {
+        token = token.substring(7, token.length());
+        User user = tokenRepository.findByToken(token).get().getUser();
+        // Создание нового заказа
+        Order order = new Order();
+        order.setUser(user);
+        order.setGoods(new HashSet<>(user.getCart()));
+        // Сохранение заказа в базе данных
+        orderRepository.save(order);
+        // Очистка корзины пользователя
+        user.getCart().clear();
+        userRepository.save(user);
+        return ResponseEntity.ok("Order added successfully");
+    }
+    @GetMapping("/orderslist")
+    @CrossOrigin
+    public List<OrderResponse> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
 
+        List<OrderResponse> orderResponses = new ArrayList<>();
+        for (Order order : orders) {
+            String userEmail = order.getUser().getMail();
+            List<String> goodsInfo = new ArrayList<>();
+            for (Good good : order.getGoods()) {
+                String goodInfo = "Name: " + good.getName() + ", Description: " + good.getDescription();
+                goodsInfo.add(goodInfo);
+            }
+            OrderResponse orderResponse = new OrderResponse(order.getId(), userEmail, goodsInfo);
+            orderResponses.add(orderResponse);
+        }
+        return orderResponses;
+    }
     @GetMapping("/cart")
     @CrossOrigin
     public String cart(@RequestHeader("Authorization") String token){
@@ -80,6 +125,8 @@ public class AuthenticationController {
         message = json.toString();
         return message;
     }
+
+
 
     @PostMapping("/addcart")
     @CrossOrigin(origins = "*")

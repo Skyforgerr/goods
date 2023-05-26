@@ -58,12 +58,19 @@ public class User implements UserDetails{
             inverseJoinColumns = @JoinColumn(name = "id_good"))
     private Set<Good> cart;
 
+
+
     public void addToCart(Good good){
         cart.add(good);
     }
 
     public void removeFromCart(Good good){
         cart.remove(good);
+    }
+    @ManyToMany(mappedBy = "user")
+    private Set<Order> orderBody;
+    public void addOrder(Order order){
+        orderBody.add(order);
     }
 
     @Override

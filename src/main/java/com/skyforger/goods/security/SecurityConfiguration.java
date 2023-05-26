@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**", "/", "/goods/view", "/goods/search")// Указанное здесь будет доступно для всех пользователей
+                .requestMatchers("/api/v1/auth/**", "/", "/goods/view", "/goods/search", "/api/v1/auth/orderslist")// Указанное здесь будет доступно для всех пользователей
                 .permitAll()
                 .requestMatchers("/users/view", "/goods/del").hasRole(Role.MANAGER.name())
                 .anyRequest()
@@ -54,7 +54,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Access-Control-Allow-Origin"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Access-Control-Allow-Origin", "Access-Control-Allow-Methods"));
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
         return urlBasedCorsConfigurationSource;
